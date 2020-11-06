@@ -5,7 +5,7 @@
 
 
 int primetester(double pn) {
-    double rechennummer;
+    double rechenNummer;
 
     if (pn == 2) {
         return 1;
