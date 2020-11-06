@@ -29,11 +29,10 @@ int main() {
 
     double upperEnd = 1500000000000000.0;
     double lowerEnd = 999999999990000.0;
-    for(int i = lowerEnd; i <= upperEnd; i++) {
+    for(double i = lowerEnd; i <= upperEnd; i++) {
         if (primetester(i) == 1) {
             printf("%f \n", i);
         }
-        nummer++;
     }
 
 
