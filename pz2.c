@@ -29,23 +29,30 @@ int main(){
     clock_t tv1, tv2;
     double time;
     tv1 = clock();
+    FILE *fp;
 
-    double limiti = 1500000000000000.0;
-    double nummer = 999999999990000.0;
+    fp = fopen("Primzahlen.txt", "w");
+
+    double limiti = 1000000000010000.0;
+    double nummer = 1000000000000000.0;
     while (nummer <= limiti)
     {
         
         if(primetester(nummer)==1){
+            fprintf(fp , "%f \n",nummer);
             printf("%f \n",nummer);
         }
         nummer++;
     }
-
+    
 
 
     tv2 = clock();
     time = (tv2 - tv1)/(CLOCKS_PER_SEC / (double) 1000.0); 
     printf("time = %f\n",time );
+    fprintf(fp ,"time = %f\n",time );
+
+    fclose(fp);
     return 0;
 
 }
