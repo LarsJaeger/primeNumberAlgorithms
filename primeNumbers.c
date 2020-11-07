@@ -6,8 +6,8 @@
 
 
 // config
-static const double upperEnd = 150.0;
-static const double lowerEnd = 99.0;
+static const double upperEnd = 9999999999.0;
+static const double lowerEnd = 1000000000.0;
 static double currentNumber = lowerEnd;
 
 
@@ -55,7 +55,7 @@ int main() {
     tv1 = clock();
 
     //multithreading setup
-    pthread_t threads[4];
+    pthread_t threads[8]; // number of threads besides the main thread
 
     //thread starter
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
@@ -69,7 +69,7 @@ int main() {
 
     //end of timing
     tv2 = clock();
-    time = (tv2 - tv1) / (CLOCKS_PER_SEC / (double) 1000.0);
+    time = (tv2 - tv1) / (CLOCKS_PER_SEC / (double) 1);
     printf("time = %f\n", time);
     return 0;
 
