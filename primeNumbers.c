@@ -66,6 +66,8 @@ double timestamp_to_seconds (int64_t timestamp)
 }
 
 int main() {
+    double percent;
+    double percentLast;
     //timing start
     int64_t start = timestamp_now ();
     
@@ -82,6 +84,14 @@ int main() {
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
         //printf("%i \n", i);
         pthread_create(&threads[i], NULL, &testRemainingNumbers, NULL);
+    }
+    //status
+    }
+    while(currentNumber <= upperEnd) {
+        percentLast = percent;
+        percent = (double) (((double) currentNumber - lowerEnd )/ ((double) upperEnd - lowerEnd));
+        printf("%f %%, %.0f seconds remaining \n", percent, (double) (100.0 - percent) / (percent - percentLast) );
+        sleep(1);
     }
     //thread stopper
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
