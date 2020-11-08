@@ -51,6 +51,18 @@ void *testRemainingNumbers() {
     return NULL;
 }
 
+int64_t timestamp_now (void)
+{
+    struct timeval tv;
+    gettimeofday (&tv, NULL);
+    return (int64_t) tv.tv_sec * CLOCKS_PER_SEC + tv.tv_usec;
+}
+
+double timestamp_to_seconds (int64_t timestamp)
+{
+    return timestamp / (double) CLOCKS_PER_SEC;
+}
+
 int main() {
     //timing start
     clock_t tv1, tv2;
@@ -58,18 +70,21 @@ int main() {
     tv1 = clock();
     double percent;
     double percentLast;
+    int64_t start = timestamp_now ();
+
 
     //open file
     
     fp = fopen("Primzahlen.txt", "w");
+    fprintf(fp ,"Remaininator!!!\n");
 
 
     //multithreading setup
-    pthread_t threads[12]; // number of threads besides the main thread
+    pthread_t threads[16]; // number of threads besides the main thread
 
     //thread starter
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
-        printf("%i \n", i);
+        //printf("%i \n", i);
         pthread_create(&threads[i], NULL, &testRemainingNumbers, NULL);
     }
     while(currentNumber <= upperEnd) {
@@ -84,9 +99,9 @@ int main() {
     }
 
     //end of timing
-    tv2 = clock();
-    time = (double) (tv2 - tv1) / CLOCKS_PER_SEC;
-    fprintf(fp ,"time = %f\n", time);
+
+    fprintf(fp ,"took %f seconds\n",
+            timestamp_to_seconds (timestamp_now () - start));
 
     //close file
     fclose(fp);
