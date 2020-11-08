@@ -66,8 +66,8 @@ double timestamp_to_seconds (int64_t timestamp)
 }
 
 int main() {
-    double percent;
-    double percentLast;
+    double percent = 0;
+    double percentLast = 0;
     //timing start
     int64_t start = timestamp_now ();
     
@@ -89,7 +89,7 @@ int main() {
     
     while(currentNumber <= upperEnd) {
         percentLast = percent;
-        percent = (double) (((double) currentNumber - lowerEnd )/ ((double) upperEnd - lowerEnd));
+        percent = (double) (((double) currentNumber - lowerEnd )/ ((double) upperEnd - lowerEnd)) * 100;
         printf("%f %%, %.0f seconds remaining \n", percent, (double) (100.0 - percent) / (percent - percentLast) );
         sleep(1);
     }
