@@ -1,15 +1,17 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<time.h>
+#include <stdint.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <time.h>
 #include<math.h>
 #include <pthread.h>
-#include <unistd.h>
 
 
 // config
 static FILE *fp;
 static const double upperEnd = 9999999999.0;
-static const double lowerEnd = 9000000000.0;
+static const double lowerEnd = 9990000000.0;
 static double currentNumber = lowerEnd;
 
 
@@ -65,13 +67,8 @@ double timestamp_to_seconds (int64_t timestamp)
 
 int main() {
     //timing start
-    clock_t tv1, tv2;
-    double time;
-    tv1 = clock();
-    double percent;
-    double percentLast;
     int64_t start = timestamp_now ();
-
+    
 
     //open file
     
@@ -87,20 +84,14 @@ int main() {
         //printf("%i \n", i);
         pthread_create(&threads[i], NULL, &testRemainingNumbers, NULL);
     }
-    while(currentNumber <= upperEnd) {
-        percentLast = percent;
-        percent = (double) (((double) currentNumber - lowerEnd )/ ((double) upperEnd - lowerEnd));
-        printf("%f %%, %.0f seconds remaining \n", percent, (double) (100.0 - percent) / (percent - percentLast) );
-        sleep(1);
-    }
     //thread stopper
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
         pthread_join(threads[i], NULL);
     }
 
     //end of timing
-
-    fprintf(fp ,"took %f seconds\n",
+    
+    fprintf(fp ,"took %f seconds\n", 
             timestamp_to_seconds (timestamp_now () - start));
 
     //close file
