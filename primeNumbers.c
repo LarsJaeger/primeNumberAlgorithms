@@ -6,8 +6,9 @@
 
 
 // config
+static FILE *fp;
 static const double upperEnd = 9999999999.0;
-static const double lowerEnd = 1000000000.0;
+static const double lowerEnd = 9000000000.0;
 static double currentNumber = lowerEnd;
 
 
@@ -41,7 +42,8 @@ void *testRemainingNumbers() {
     double currentThreadNumber = getNextNumber();
     while(currentThreadNumber != 0) {
         if (primetester(currentThreadNumber) == 1) {
-            printf("%.0f \n", currentThreadNumber);
+            //printf("%.0f \n", currentThreadNumber);
+            fprintf(fp ,"%.0f \n", currentThreadNumber);
         }
         currentThreadNumber = getNextNumber();
     }
@@ -54,12 +56,18 @@ int main() {
     double time;
     tv1 = clock();
 
+    //open file
+    
+    fp = fopen("Primzahlen.txt", "w");
+    fprintf(fp ,"Remaininator!!!\n");
+
+
     //multithreading setup
-    pthread_t threads[8]; // number of threads besides the main thread
+    pthread_t threads[16]; // number of threads besides the main thread
 
     //thread starter
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
-        printf("%i \n", i);
+        //printf("%i \n", i);
         pthread_create(&threads[i], NULL, &testRemainingNumbers, NULL);
     }
     //thread stopper
@@ -69,8 +77,11 @@ int main() {
 
     //end of timing
     tv2 = clock();
-    time = (tv2 - tv1) / (CLOCKS_PER_SEC / (double) 1);
-    printf("time = %f\n", time);
+    time = (double) (tv2 - tv1) / CLOCKS_PER_SEC;
+    fprintf(fp ,"time = %f\n", time);
+
+    //close file
+    fclose(fp);
     return 0;
 
 }
