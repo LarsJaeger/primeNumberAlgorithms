@@ -1,6 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<time.h>
+#include <stdint.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <time.h>
 #include<math.h>
 #include <pthread.h>
 
@@ -8,7 +11,7 @@
 // config
 static FILE *fp;
 static const double upperEnd = 9999999999.0;
-static const double lowerEnd = 9000000000.0;
+static const double lowerEnd = 9990000000.0;
 static double currentNumber = lowerEnd;
 
 
@@ -50,11 +53,22 @@ void *testRemainingNumbers() {
     return NULL;
 }
 
+int64_t timestamp_now (void)
+{
+    struct timeval tv;
+    gettimeofday (&tv, NULL);
+    return (int64_t) tv.tv_sec * CLOCKS_PER_SEC + tv.tv_usec;
+}
+
+double timestamp_to_seconds (int64_t timestamp)
+{
+    return timestamp / (double) CLOCKS_PER_SEC;
+}
+
 int main() {
     //timing start
-    clock_t tv1, tv2;
-    double time;
-    tv1 = clock();
+    int64_t start = timestamp_now ();
+    
 
     //open file
     
@@ -76,9 +90,9 @@ int main() {
     }
 
     //end of timing
-    tv2 = clock();
-    time = (double) (tv2 - tv1) / CLOCKS_PER_SEC;
-    fprintf(fp ,"time = %f\n", time);
+    
+    fprintf(fp ,"took %f seconds\n", 
+            timestamp_to_seconds (timestamp_now () - start));
 
     //close file
     fclose(fp);
