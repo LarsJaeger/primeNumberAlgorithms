@@ -3,6 +3,7 @@
 #include<time.h>
 #include<math.h>
 #include <pthread.h>
+#include <unistd.h>
 
 
 // config
@@ -55,20 +56,27 @@ int main() {
     clock_t tv1, tv2;
     double time;
     tv1 = clock();
+    double percent;
+    double percentLast;
 
     //open file
     
     fp = fopen("Primzahlen.txt", "w");
-    fprintf(fp ,"Remaininator!!!\n");
 
 
     //multithreading setup
-    pthread_t threads[16]; // number of threads besides the main thread
+    pthread_t threads[12]; // number of threads besides the main thread
 
     //thread starter
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
-        //printf("%i \n", i);
+        printf("%i \n", i);
         pthread_create(&threads[i], NULL, &testRemainingNumbers, NULL);
+    }
+    while(currentNumber <= upperEnd) {
+        percentLast = percent;
+        percent = (double) (((double) currentNumber - lowerEnd )/ ((double) upperEnd - lowerEnd));
+        printf("%f %%, %.0f seconds remaining \n", percent, (double) (100.0 - percent) / (percent - percentLast) );
+        sleep(1);
     }
     //thread stopper
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
