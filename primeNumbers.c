@@ -76,7 +76,6 @@ int main() {
     //open file
     
     fp = fopen("Primzahlen.txt", "w");
-    fprintf(fp ,"Remaininator!!!\n");
 
 
     //multithreading setup
