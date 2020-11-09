@@ -26,13 +26,6 @@ static double getNextNumber() {
 
 int primetester(double pn) {
     double rechenNummer;
-
-    if (pn == 2) {
-        return 1;
-    }
-    if (remainder(pn, 2) == 0) {
-        return 0;
-    }
     double highestPossibleFactor = sqrt(pn);
     for (rechenNummer = 3; rechenNummer <= highestPossibleFactor; rechenNummer += 2) {
         if (remainder(pn, rechenNummer) == 0) {
