@@ -10,17 +10,17 @@
 
 // config
 static FILE *fp;
-static const double upperEnd = 9999999999.0;
-static const double lowerEnd = 9990000000.0;
-static double currentNumber = lowerEnd;
+static double upperLimit = 99.0;
+static double lowerLimit = 0.0;
+static double currentNumber;
 
 
 static double getNextNumber() {
-    if(currentNumber > upperEnd) {
+    if(currentNumber > upperLimit) {
         return 0;
     }
     double nr = currentNumber;
-    currentNumber++;
+    currentNumber += 2;
     return nr;
 }
 
@@ -66,6 +66,14 @@ double timestamp_to_seconds (int64_t timestamp)
 }
 
 int main() {
+    //input thread number and limits
+    int threadNumber;
+    printf("please enter the number of threads you want to run: ");
+    scanf("%d", &threadNumber);
+    printf("please set the lower limit: ");
+    scanf("%lf", &lowerLimit);
+    printf("please set the upper limit: ");
+    scanf("%lf", &upperLimit);
     double percent = 0;
     double percentLast = 0;
     //timing start
@@ -75,11 +83,23 @@ int main() {
     //open file
     
     fp = fopen("Primzahlen.txt", "w");
-
+    
+    //prepare limits and current number
+    if(lowerLimit < 0) {
+        printf("please choose a positive number or zero as the lower limit");
+        return 0;
+    }
+    currentNumber = lowerLimit;
+    if(currentNumber == 1) {
+        fprintf(fp ,"%.0f \n", 1.0);
+    }
+    if(remainder(currentNumber, 2) == 0) {
+        currentNumber++;
+    }
 
     //multithreading setup
-    pthread_t threads[16]; // number of threads besides the main thread
-
+    pthread_t threads[threadNumber]; // number of threads besides the main thread
+    
     //thread starter
     for(int i = 0; i < sizeof(threads) / sizeof(threads[0]); i++) {
         //printf("%i \n", i);
@@ -87,10 +107,10 @@ int main() {
     }
     //status
     
-    while(currentNumber <= upperEnd) {
+    while(currentNumber <= upperLimit) {
         percentLast = percent;
-        percent = (double) (((double) currentNumber - lowerEnd )/ ((double) upperEnd - lowerEnd)) * 100;
-        printf("%f %%, %.0f seconds remaining \n", percent, (double) (100.0 - percent) / (percent - percentLast) );
+        percent = (double) (((double) currentNumber - lowerLimit )/ ((double) upperLimit - lowerLimit)) * 100;
+        printf("%f %%, %.0f seconds remaining \n", percent, (double) (100.0 - percent) / (double) (percent - percentLast));
         sleep(1);
     }
     //thread stopper
@@ -105,6 +125,6 @@ int main() {
 
     //close file
     fclose(fp);
-    return 0;
+    return 1;
 
 }
