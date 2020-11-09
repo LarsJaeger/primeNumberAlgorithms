@@ -1,2 +1,2 @@
 # primeNumberAlgorithms
-Trying out different algorithms to get prime numbers.
+Trying out different algorithms to retrieve prime numbers.
